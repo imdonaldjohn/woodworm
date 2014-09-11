@@ -1,0 +1,26 @@
+<html>
+	<head>
+		<title>Woodworm Sandbox</title>
+	</head>
+	<body>
+
+		<div id="Book"></div>
+		<script type="text/javascript" src="./jquery-1.11.1.min.js"></script>
+		<script type="text/javascript" src="./data.js"></script>
+		<script type="text/javascript" src="./woodworm.js"></script>
+		<script type="text/javascript">
+			var ww = new Woodworm('Book',{
+				yup: 'one'
+			});
+
+			ww.getChapter('john',3).done(function(args){
+				console.log('done')
+			});
+			console.log('after')
+			
+			// console.log(ww.element, ww.options);
+			// console.log(ww2.element, ww2.options);
+
+		</script>
+	</body>
+</html>
