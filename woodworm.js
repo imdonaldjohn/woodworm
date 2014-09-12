@@ -38,11 +38,13 @@
 		    return b;
 		},
 		getChapter: function(book, chapter, callback){
-			var _this = this;
-			var _book = book ? book : this.book;
-			var _chapter = typeof(chapter) == 'number' ? chapter : parseInt(chapter);
-			this.chapter = _chapter;
-			this.book = _book;
+			//Todo: add front-end validation for book, chapter, verse
+			if(typeof(book) !== "function"){
+				this.options.chapter = chapter ? parseInt(chapter) : this.options.chapter;;
+				this.options.book = book ? book : this.options.book;
+			}else {
+				callback = book;	
+			}
 			// Whats going on here is an attempt to preserve context in the midst of $getJson
 			// I had trouble getting the callback to run using $.ajax
 			// Running the naked json call coming back from bible.org woulnd't work since render
@@ -59,15 +61,15 @@
 					context.element.append('<p>' + verses[i].text + '</p>');
 				}
 			};
-			return verses;
 		},
 		getData: function(innerCallback, outerCallback, context){
 			// Not specifying a callback name since that wont work (reason given above). done() is still returning the data.
 			// So this is basically a way to get around Same Origiin problems.
-			$.getJSON('http://labs.bible.org/api/?passage=John%203&type=json&callback=?').done(function(args){				
+			$.getJSON('http://labs.bible.org/api/?passage=' + context.options.book + '%20' + context.options.chapter + '&type=json&callback=?').done(function(args){				
 				innerCallback(args, context);
-				outerCallback(args, context);
-			})
+				if(outerCallback)
+					outerCallback(args, context);
+			});
 		},
 		err: function(msg){
 			console.error(msg);

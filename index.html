@@ -8,14 +8,13 @@
 		<script type="text/javascript" src="./data.js"></script>
 		<script type="text/javascript" src="./woodworm.js"></script>
 		<script type="text/javascript">
-			var ww = new Woodworm('Book',{
-				yup: 'one'
-			});
+			var worm = new Woodworm('Book');
+      worm.getChapter();
 
-			ww.getChapter('john',3, function(args){
-				console.log(args)
-			});
-
+			// ww.getChapter('john',3, function(args){
+			// 	console.log(args)
+			// });
+    
 		</script>
 	</body>
 </html>
