@@ -11,7 +11,7 @@
 	if(window.jQuery){
 		window.Woodworm = Woodworm;
 	}else{
-		this.err("jQuery not included. Woodworm needs jQuery to do it's thang.");
+		console.error("Woodworm: jQuery not included. Woodworm needs jQuery to do it's thang.");
 	}
 
 
