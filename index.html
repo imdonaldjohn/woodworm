@@ -13,13 +13,9 @@
 				yup: 'one'
 			});
 
-			ww.getChapter('john',3).done(function(args){
-				console.log('done')
+			ww.getChapter('john',3, function(args){
+				console.log(args)
 			});
-			console.log('after')
-			
-			// console.log(ww.element, ww.options);
-			// console.log(ww2.element, ww2.options);
 
 		</script>
 	</body>
