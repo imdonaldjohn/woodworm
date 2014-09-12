@@ -56,9 +56,9 @@
 			for (var i = 0; i < verses.length; i++) {
 				if(verses[i].title){
 					context.element.append('<h4>' + verses[i].title + '</h4>');
-					context.element.append('<p>' + verses[i].text + '</p>');
+					context.element.append("<div class='p'><span class='content'></span><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
 				}else{
-					context.element.append('<p>' + verses[i].text + '</p>');
+					context.element.append("<div class='p'><span class='content'></span><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
 				}
 			};
 		},

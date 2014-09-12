@@ -1,0 +1,34 @@
+h4 {
+	font-family: Helvetica;
+}
+
+.p {
+	display: inline;
+	font-size: .8em;
+	line-height: 2em;
+	font-family: helvetica;
+}
+
+.content {
+
+}
+
+.verse {
+	border: 0;
+	margin: 0;
+	padding: 2px;
+	font-size: 100%;
+}
+
+.label {
+	color: #777;
+	font-family: Helvetica;
+	font-weight: normal;
+	font-size: 8px;
+	line-height: 1;
+	margin-right: 4px;
+}
+
+.content {
+
+}
