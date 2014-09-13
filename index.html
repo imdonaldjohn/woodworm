@@ -38,8 +38,18 @@
                 This here is pretty easy to do. Once you instantiate Woodworm, the bible view will be built for you - displaying Genesis 1
               </p>
 <pre>
-// Create Woodworm and let it do its thang.
-var worm = new Woodworm([id of target div]);
+&lthtml&gt
+  &ltbody&gt
+    &ltdiv id="bibleDiv"&gt
+    &lt/div &gt
+    &ltscript type="text/javascript"&gt
+
+      // Create Woodworm and let it do its thang.
+      var worm = new Woodworm('bibleDiv');
+         
+    &lt/script&gt
+  &lt/body &gt
+&lt/html &gt
 </pre>
             </div>            
           </div>
