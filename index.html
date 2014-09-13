@@ -4,13 +4,20 @@
     <link href="./woodworm.css" rel="stylesheet" type="text/css"></link>
 	</head>
 	<body>
-		<div id="Book"></div>
+    <div id="header">
+      <h1>Woodworm.js</h1>
+      <img id="header-logo" src="woodworm.png" alt='Woodworm.js'>      
+    </div>
+		<div id="bodyWrapper">
+      <div id="book"></div>
+    </div>
+    
 		<script type="text/javascript" src="./jquery-1.11.1.min.js"></script>
 		<script type="text/javascript" src="./data.js"></script>
 		<script type="text/javascript" src="./woodworm.js"></script>
 		<script type="text/javascript">
 
-			var worm = new Woodworm('Book');
+			var worm = new Woodworm('book');
       // worm.getChapter();
 			worm.getChapter('john',4);
       
