@@ -1,14 +1,30 @@
 <html>
 	<head>
 		<title>Woodworm Sandbox</title>
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans|Lato|Lora|Poiret+One|PT+Sans+Narrow|Arimo|Ubuntu|Josefin+Sans|Bitter|Lobster|Anton|Rokkitt|Droid+Serif|Varela+Round|Cuprum|Sacramento|Bad+Script|Quattrocento+Sans|Montserrat|Roboto+Slab|Pacifico|Hammersmith+One|Raleway|Karla|Annie+Use+Your+Telescope|Dancing+Script|Open+Sans|Bree+Serif|Maven+Pro' rel='stylesheet' type='text/css'>
     <link href="./woodworm.css" rel="stylesheet" type="text/css"></link>
 	</head>
 	<body>
     <div id="header">
       <h1>Woodworm.js</h1>
+      <h2>A handy-dandy javascript library to parse, display, and manage bible passages from Labs.Bible.org</h2>
       <img id="header-logo" src="woodworm.png" alt='Woodworm.js'>      
     </div>
+    <div id="navigation">
+      <div>
+        <ul class="nav-list">
+          <li><a href="#">About</a></li>
+          <li><a href="#">Usage</a></li>
+          <li><a href="#">Config</a></li>
+          <li><a href="#">Todo</a></li>
+        </ul>
+      </div>
+    </div>
 		<div id="bodyWrapper">
+      <div class="about">
+        <h3>What is Woodworm.js?</h3>
+        <div class="about-text">I you ever want to display a readable bible on your site or in your app, you're going to have to hit up one of the many api's out there, pull data, and then build html from what you get - and then style it...and then figure out a way to give users the ability to select/highlight verses and do with them as they please. Well, I found myself in this position, so I thought I'd make Woodworm which does all that for you in one call.</div>
+      </div>
       <div id="book"></div>
     </div>
     
