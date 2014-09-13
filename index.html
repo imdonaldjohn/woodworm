@@ -23,9 +23,29 @@
 		<div id="bodyWrapper">
       <div class="about">
         <h3>What is Woodworm.js?</h3>
-        <div class="about-text">I you ever want to display a readable bible on your site or in your app, you're going to have to hit up one of the many api's out there, pull data, and then build html from what you get - and then style it...and then figure out a way to give users the ability to select/highlight verses and do with them as they please. Well, I found myself in this position, so I thought I'd make Woodworm which does all that for you in one call.</div>
+        <div class="about-text">If you ever want to display a readable bible on your site or in your app, you're going to have to hit up one of the many api's out there, pull data, and then build html from what you get - and then style it...and then figure out a way to give users the ability to select/highlight verses and do with them as they please. Well, I found myself in this position, so I thought I'd make Woodworm which does all that for you in one call.</div>
       </div>
-      <div id="book"></div>
+      <div class="usage">
+        <h3>Usage</h3>
+        <div class="ex-1">
+          <div class="bible">
+            <div id="book" class="bible-viewer"></div>
+          </div>
+          <div class="details">
+            <div class="details-text">
+              <h4>It's easy to get set up rolling - it's just one line...</h4>
+              <p>
+                This here is pretty easy to do. Once you instantiate Woodworm, the bible view will be built for you - displaying Genesis 1
+              </p>
+<pre>
+// Create Woodworm and let it do its thang.
+var worm = new Woodworm([id of target div]);
+</pre>
+            </div>            
+          </div>
+        </div>
+      </div>
+      
     </div>
     
 		<script type="text/javascript" src="./jquery-1.11.1.min.js"></script>
@@ -34,8 +54,8 @@
 		<script type="text/javascript">
 
 			var worm = new Woodworm('book');
-      // worm.getChapter();
-			worm.getChapter('john',4);
+      worm.getChapter();
+			// worm.getChapter('john',4);
       
 		</script>
 	</body>
