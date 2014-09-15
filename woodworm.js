@@ -21,9 +21,9 @@
 			chapter: 1
 		},
 		init: function(options){
-			// document.domain = "labs.bible.org";
 			var _this = this;
 			this.options = this.extend(options ,this.defaults);
+			this.getChapter();
 		},
 		extend: function(b,a){ 
 			var prop;
@@ -53,6 +53,7 @@
 			this.getData(this.render, callback, this);
 		},
 		render: function(verses, context){
+			context.element.empty();
 			for (var i = 0; i < verses.length; i++) {
 				if(verses[i].title){
 					context.element.append('<h4>' + verses[i].title + '</h4>');
@@ -70,6 +71,9 @@
 				if(outerCallback)
 					outerCallback(args, context);
 			});
+		},
+		validate: function(book,chapter,verse){
+
 		},
 		err: function(msg){
 			console.error(msg);
