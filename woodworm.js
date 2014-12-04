@@ -8,17 +8,23 @@
 		}
 	}
 
-	if(window.jQuery){
+	if(window.jQuery && window.Woodworm == null){
 		window.Woodworm = Woodworm;
+		window.catchClick = function(book, chapter, verse){
+			window.Woodworm.prototype.verseClick(book, chapter, verse);
+		}
 	}else{
 		console.error("Woodworm: jQuery not included. Woodworm needs jQuery to do it's thang.");
 	}
 
 
+
 	Woodworm.prototype = {
 		defaults: {
 			book: "Genesis",
-			chapter: 1
+			chapter: 1,
+			verse: 1,
+			selected_verses: []
 		},
 		init: function(options){
 			var _this = this;
@@ -55,11 +61,14 @@
 		render: function(verses, context){
 			context.element.empty();
 			for (var i = 0; i < verses.length; i++) {
+				var book = verses[i].bookname;
+				var chapter = verses[i].chapter;
+				var verse = verses[i].verse;
 				if(verses[i].title){
 					context.element.append('<h4>' + verses[i].title + '</h4>');
-					context.element.append("<div class='p'><span class='content'></span><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
+					context.element.append("<div class='p' id=" + book + chapter + '-' + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='content'></span><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
 				}else{
-					context.element.append("<div class='p'><span class='content'></span><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
+					context.element.append("<div class='p' id=" + book + chapter + '-' + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='content'></span><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
 				}
 			};
 		},
@@ -71,6 +80,34 @@
 				if(outerCallback)
 					outerCallback(args, context);
 			});
+		},
+		status: function(){
+			return this.defaults;
+		},
+		verseClick: function(book, chapter, verse){
+
+			function toggleSelected(verse, verses){
+				var deleted;
+				$.grep(verses, function(e, i){ 
+					if(verse.verse == e.verse && verse.book == e.book && verse.chapter == e.chapter){
+						verses = verses.splice(i,1);
+						deleted = true;
+					}
+				});
+				if(!deleted)
+					verses.push(verse);
+				
+				console.log(verses)
+			}
+
+			if($('#'+book+chapter+'-'+verse).css('background-color') != "rgb(255, 255, 0)"){
+				$('#'+book+chapter+'-'+verse).css('background-color', 'yellow');
+				// this.defaults.selected_verses.push({book:book, chapter:chapter, verse:verse});
+			}else{
+				$('#'+book+chapter+'-'+verse).css('background-color', 'white');	
+			}
+			toggleSelected({book: book, chapter: chapter, verse: verse}, this.defaults.selected_verses);
+
 		},
 		validate: function(book,chapter,verse){
 
