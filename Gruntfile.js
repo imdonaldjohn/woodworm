@@ -47,12 +47,38 @@ module.exports = function(grunt) {
 			}
 		},
 
-		// watch for changes to source
-		// Better than calling grunt a million times
-		// (call 'grunt watch')
+		// Watch for changes to source
 		watch: {
-		    files: ['src/*'],
-		    tasks: ['default']
+			files: ['src/*.js','demo/*.html'],
+			tasks: ['default'],
+			options: {
+				reload: true
+			}
+		},
+
+		// YUI documentation
+		yuidoc: {
+			compile: {
+				name: '<%= pkg.name %>',
+				description: '<%= pkg.description %>',
+				version: '<%= pkg.version %>',
+				url: '<%= pkg.homepage %>',
+				options: {
+					paths: 'src/',
+					outdir: 'docs/'
+				}
+			}
+		},
+
+		// Connect dev server
+		connect: {
+			server: {
+				options: {
+					port: 9001,
+					base: 'demo/',
+					keepalive: true
+				}
+			}
 		}
 
 	});
@@ -61,9 +87,12 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-jshint");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-contrib-watch");
+	grunt.loadNpmTasks("grunt-contrib-yuidoc");
+	grunt.loadNpmTasks("grunt-contrib-connect");
 
 	grunt.registerTask("build", ["concat", "uglify"]);
-	grunt.registerTask("default", ["jshint", "build"]);
+	grunt.registerTask("default", ["jshint", "build", "yuidoc", "connect"]);
+	grunt.registerTask("watch", ["default"]);
 	grunt.registerTask("travis", ["default"]);
 
 };
