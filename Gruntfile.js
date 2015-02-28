@@ -94,8 +94,8 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-connect");
 
 	grunt.registerTask("build", ["concat", "uglify"]);
-	grunt.registerTask("default", ["jshint", "build", "yuidoc", "connect"]);
-	grunt.registerTask("watch", ["default"]);
+	grunt.registerTask("dev", ["jshint", "build", "yuidoc", "connect"]);
+	grunt.registerTask("default", ["jshint", "build", "yuidoc"]);
 	grunt.registerTask("travis", ["default"]);
 
 };
