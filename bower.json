@@ -1,0 +1,18 @@
+{
+	"name": "Woodworm.js",
+	"version": "0.1.1",
+	"homepage": "http://donald-john.github.io/woodworm/",
+	"authors": [
+		"Don Adams <donaldradams2@gmail.com>"
+	],
+	"description": "A handy-dandy javascript library to parse, display, and manage bible passages from Labs.Bible.org",
+	"main": "src/woodworm.js",
+	"keywords": [
+		"jquery",
+		"woodworm",
+		"bible",
+		"jquery-plugin",
+		"woodworm.js"
+	],
+	"license": "MIT"
+}

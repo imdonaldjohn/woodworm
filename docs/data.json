@@ -1,0 +1,60 @@
+{
+    "project": {
+        "name": "Woodworm.js API",
+        "description": "A handy-dandy javascript library to parse, display, and manage bible passages from Labs.Bible.org",
+        "version": "0.1.1",
+        "url": "http://donald-john.github.io/woodworm/"
+    },
+    "files": {
+        "src/woodworm.js": {
+            "name": "src/woodworm.js",
+            "modules": {},
+            "classes": {
+                "Woodworm": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {
+        "Woodworm": {
+            "name": "Woodworm",
+            "shortname": "Woodworm",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "file": "src/woodworm.js",
+            "line": 22,
+            "params": [
+                {
+                    "name": "element",
+                    "description": "The element woodworm will build upon.",
+                    "type": "JQuery element"
+                },
+                {
+                    "name": "options",
+                    "description": "Any options passed to overide the defaults.",
+                    "type": "Object"
+                }
+            ],
+            "is_constructor": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "src/woodworm.js",
+            "line": 42,
+            "itemtype": "method",
+            "name": "Init",
+            "return": {
+                "description": "[description]",
+                "type": "[type]"
+            },
+            "class": "Woodworm"
+        }
+    ],
+    "warnings": []
+}

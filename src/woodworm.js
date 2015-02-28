@@ -1,48 +1,59 @@
-;(function(window, document) {
-	var Woodworm = function(element, options){
-		if(typeof(element) == 'string' && $('#' + element).length > 0){
-			this.element = $('#' + element);
-			this.init(options);
-		}else{
-			this.err("Something's not right with the element you provided: ", element)
-		}
+;
+(function($, window, document, undefined) {
+
+	"use strict";
+
+	if(!$ || !window.jQuery){
+		// window.Woodworm = Woodworm;
+		// window.catchClick = function(book, chapter, verse){
+		// 	window.Woodworm.prototype.verseClick(book, chapter, verse);
+		// }
+		console.error("Woodworm: jQuery not included. Woodworm needs jQuery to do it's thang."); 
 	}
 
-	if(window.jQuery && window.Woodworm == null){
-		window.Woodworm = Woodworm;
-		window.catchClick = function(book, chapter, verse){
-			window.Woodworm.prototype.verseClick(book, chapter, verse);
-		}
-	}else{
-		console.error("Woodworm: jQuery not included. Woodworm needs jQuery to do it's thang.");
-	}
-
-
-
-	Woodworm.prototype = {
-		defaults: {
+	var name = "Woodworm",
+		defaults = {
 			book: "Genesis",
 			chapter: 1,
 			verse: 1,
 			selected_verses: []
-		},
-		init: function(options){
-			var _this = this;
-			this.options = this.extend(options ,this.defaults);
+		};
+
+	/**
+	 * @class  Woodworm
+	 * @param {jQuery element} element The element woodworm will build upon.
+	 * @param {Object} options Any options passed to overide the defaults.
+	 *
+	 * @constructor
+	 */
+	function Woodworm(element, options) {
+		if(typeof(element) == 'string' && $('#' + element).length > 0){
+			this.element = element;
+			this.settings = $.extend({}, defaults, options);
+			this._defaults = defaults;
+			this._name = name;
+			this.init();
+		}else{
+			this.err("Something's not right with the element you provided: ", element)
+		}        
+	}
+
+	$.extend(Woodworm.prototype, {
+		/**
+		 * Initialize Woodworm
+		 * @method init 
+		 */
+		init: function() {             
 			this.getChapter();
+			console.log("xD");
 		},
-		extend: function(b,a){ 
-			var prop;
-		    if (b === undefined) {
-		      return a;
-		    }
-		    for (prop in a) {
-		      if (a.hasOwnProperty(prop) && b.hasOwnProperty(prop) === false) {
-		        b[prop] = a[prop];
-		      }
-		    }
-		    return b;
-		},
+		/**
+		 * Retreive a chapter from labs.Bible.org
+		 * @method  getChapter
+		 * @param  {Integer}   book     The book to lookup
+		 * @param  {Integer}   chapter  The chapter to lookup
+		 * @param  {Function} callback  The associated callback
+		 */
 		getChapter: function(book, chapter, callback){
 			//Todo: add front-end validation for book, chapter, verse
 			if(typeof(book) !== "function"){
@@ -58,6 +69,12 @@
 			// So this is what I came up with. For now.
 			this.getData(this.render, callback, this);
 		},
+		/**
+		 * Render a set of verses to the DOM
+		 * @method  render
+		 * @param  {Object} verses  An array of verses (json)
+		 * @param  {Object} context In order to preserve context
+		 */
 		render: function(verses, context){
 			context.element.empty();
 			for (var i = 0; i < verses.length; i++) {
@@ -115,5 +132,15 @@
 		err: function(msg){
 			console.error(msg);
 		}
-	}
-})(window, window.document)
+	});
+
+
+	$.fn[name] = function(options) {
+		return this.each(function() {
+			if (!$.data(this, "plugin_" + name)) {
+				$.data(this, "plugin_" + name, new Woodworm(this, options));
+			}
+		});
+	};
+
+})(jQuery, window, document);

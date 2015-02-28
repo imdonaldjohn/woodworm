@@ -1,0 +1,43 @@
+{
+  "name": "Woodworm.js",
+  "version": "0.1.1",
+  "description": "A handy-dandy javascript library to parse, display, and manage bible passages from Labs.Bible.org",
+  "keywords": [
+    "jquery-plugin",
+    "jquery",
+    "boilerplate",
+    "plugins"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/donald-john/woodworm"
+  },
+  "bugs": {
+    "url": "https://github.com/donald-john/woodworm/issues"
+  },
+  "author": {
+    "name": "Don Adams",
+    "email": "donaldradams2@gmail.com",
+    "url": "https://github.com/donald-john"
+  },
+  "homepage": "http://donald-john.github.io/woodworm/",
+  "contributors": [
+    {
+      "name": "Don Adams",
+      "email": "donaldradams2@gmail.com",
+      "url": "https://github.com/donald-john"
+    }
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-cli": "~0.1.13",
+    "grunt-contrib-concat": "^0.5.1",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-contrib-uglify": "^0.8.0",
+    "grunt-contrib-watch": "^0.6.1"
+  },
+  "scripts": {
+    "test": "grunt travis --verbose"
+  }
+}
