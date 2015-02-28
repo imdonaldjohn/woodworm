@@ -26,15 +26,11 @@
 	 * @constructor
 	 */
 	function Woodworm(element, options) {
-		if(typeof(element) === "string" && $("#" + element).length > 0){
-			this.element = element;
-			this.settings = $.extend({}, defaults, options);
-			this._defaults = defaults;
-			this._name = name;
-			this.init();
-		}else{
-			this.err("Something's not right with the element you provided: ", element);
-		}        
+		this.element = element;
+		this.settings = $.extend({}, defaults, options);
+		this._defaults = defaults;
+		this._name = name;
+		this.init();     
 	}
 
 	$.extend(Woodworm.prototype, {
@@ -42,9 +38,8 @@
 		 * Initialize Woodworm
 		 * @method init 
 		 */
-		init: function() {             
+		init: function() {    
 			this.getChapter();
-			console.log("xD");
 		},
 		/**
 		 * Retreive a chapter from labs.Bible.org
@@ -56,8 +51,8 @@
 		getChapter: function(book, chapter, callback){
 			//Todo: add front-end validation for book, chapter, verse
 			if(typeof(book) !== "function"){
-				this.options.chapter = chapter ? parseInt(chapter) : this.options.chapter;
-				this.options.book = book ? book : this.options.book;
+				this.settings.chapter = chapter ? parseInt(chapter) : this.settings.chapter;
+				this.settings.book = book ? book : this.settings.book;
 			}else {
 				callback = book;	
 			}
@@ -75,23 +70,23 @@
 		 * @param  {Object} context In order to preserve context
 		 */
 		render: function(verses, context){
-			context.element.empty();
+			$(context.element).empty();
 			for (var i = 0; i < verses.length; i++) {
 				var book = verses[i].bookname;
 				var chapter = verses[i].chapter;
 				var verse = verses[i].verse;
 				if(verses[i].title){
-					context.element.append("<h4>" + verses[i].title + "</h4>");
-					context.element.append("<div class='p' id=" + book + chapter + "-" + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='content'></span><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
+					$(context.element).append("<h4>" + verses[i].title + "</h4>");
+					$(context.element).append("<div class='p' id=" + book + chapter + "-" + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='content'></span><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
 				}else{
-					context.element.append("<div class='p' id=" + book + chapter + "-" + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='content'></span><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
+					$(context.element).append("<div class='p' id=" + book + chapter + "-" + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='content'></span><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
 				}
 			}
 		},
 		getData: function(innerCallback, outerCallback, context){
 			// Not specifying a callback name since that wont work (reason given above). done() is still returning the data.
 			// So this is basically a way to get around Same Origiin problems.
-			$.getJSON("http://labs.bible.org/api/?passage=" + context.options.book + "%20" + context.options.chapter + "&type=json&callback=?").done(function(args){				
+			$.getJSON("http://labs.bible.org/api/?passage=" + context.settings.book + "%20" + context.settings.chapter + "&type=json&callback=?").done(function(args){				
 				innerCallback(args, context);
 				if(outerCallback) {
 					outerCallback(args, context);
@@ -99,7 +94,7 @@
 			});
 		},
 		status: function(){
-			return this.defaults;
+			return this.settings;
 		},
 		verseClick: function(book, chapter, verse){
 
@@ -120,11 +115,11 @@
 
 			if($("#"+book+chapter+"-"+verse).css("background-color") !== "rgb(255, 255, 0)"){
 				$("#"+book+chapter+"-"+verse).css("background-color", "yellow");
-				// this.defaults.selected_verses.push({book:book, chapter:chapter, verse:verse});
+				// this.settings.selected_verses.push({book:book, chapter:chapter, verse:verse});
 			}else{
 				$("#"+book+chapter+"-"+verse).css("background-color", "white");	
 			}
-			toggleSelected({book: book, chapter: chapter, verse: verse}, this.defaults.selected_verses);
+			toggleSelected({book: book, chapter: chapter, verse: verse}, this.settings.selected_verses);
 
 		},
 		// validate: function(book,chapter,verse){
