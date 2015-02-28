@@ -48,13 +48,13 @@ module.exports = function(grunt) {
 		},
 
 		// Watch for changes to source
-		watch: {
-			files: ['src/*.js','demo/*.html'],
-			tasks: ['default'],
-			options: {
-				reload: true
-			}
-		},
+		// watch: {
+		// 	files: ['src/*.js','demo/*.html'],
+		// 	tasks: ['default'],
+		// 	options: {
+		// 		reload: true
+		// 	}
+		// },
 
 		// YUI documentation
 		yuidoc: {
@@ -72,11 +72,14 @@ module.exports = function(grunt) {
 
 		// Connect dev server
 		connect: {
+			options: {
+				port: 9001,
+				hostname: 'localhost',
+				keepalive: true	
+			},
 			server: {
 				options: {
-					port: 9001,
-					base: 'demo/',
-					keepalive: true
+					base: ['./','./demo/']
 				}
 			}
 		}
@@ -86,7 +89,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-contrib-jshint");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
-	grunt.loadNpmTasks("grunt-contrib-watch");
+	// grunt.loadNpmTasks("grunt-contrib-watch");
 	grunt.loadNpmTasks("grunt-contrib-yuidoc");
 	grunt.loadNpmTasks("grunt-contrib-connect");
 
