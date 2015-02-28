@@ -1,3 +1,11 @@
+/*
+ *  Woodworm.js - v0.1.1
+ *  A handy-dandy javascript library to parse, display, and manage bible passages from Labs.Bible.org
+ *  http://donald-john.github.io/woodworm/
+ *
+ *  Made by Don Adams
+ *  Under MIT License
+ */
 ;(function($, window, document, undefined) {
 
 	"use strict";
