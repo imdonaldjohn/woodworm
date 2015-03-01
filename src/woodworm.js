@@ -44,8 +44,8 @@
 		/**
 		 * Retreive a chapter from labs.Bible.org
 		 * @method  getChapter
-		 * @param  {Integer}   book     The book to lookup
-		 * @param  {Integer}   chapter  The chapter to lookup
+		 * @param  {Number}   book     The book to lookup
+		 * @param  {Number}   chapter  The chapter to lookup
 		 * @param  {Function} callback  The associated callback
 		 */
 		getChapter: function(book, chapter, callback){
@@ -83,6 +83,13 @@
 				}
 			}
 		},
+		/**
+		 * Grab bible data from labs.bible.org/api/[passage]
+		 * @method  getData
+		 * @param  {Function} innerCallback Callback used inside the ajax call which retains context
+		 * @param  {Function} outerCallback Callback which is passed the data and correct context
+		 * @param  {Object} context       Context of the calling function
+		 */
 		getData: function(innerCallback, outerCallback, context){
 			// Not specifying a callback name since that wont work (reason given above). done() is still returning the data.
 			// So this is basically a way to get around Same Origiin problems.
@@ -93,9 +100,21 @@
 				}
 			});
 		},
+		/**
+		 * Return the status of the plugin - basically the current state / settings
+		 * @method  status
+		 * @return {Object} Plugin settings / State
+		 */
 		status: function(){
 			return this.settings;
 		},
+		/**
+		 * Called when a verse is clicked - Responsible for toggling and storing selected verses
+		 * @method  verseClick
+		 * @param  {String} book    Book clicked
+		 * @param  {Number} chapter Chapter clicked
+		 * @param  {Number} verse   Verse clicked
+		 */
 		verseClick: function(book, chapter, verse){
 
 			function toggleSelected(verse, verses){
@@ -125,6 +144,11 @@
 		// validate: function(book,chapter,verse){
 
 		// },
+		/**
+		 * Formats an error should Woodworm need to throw any
+		 * @method  err
+		 * @param  {String} msg A custom error string
+		 */
 		err: function(msg){
 			console.error(msg);
 		}
