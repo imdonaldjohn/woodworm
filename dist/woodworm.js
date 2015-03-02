@@ -11,20 +11,8 @@
 	"use strict";
 
 	if(!$ || !window.jQuery){
-		// window.Woodworm = Woodworm;
-		// window.catchClick = function(book, chapter, verse){
-		// 	window.Woodworm.prototype.verseClick(book, chapter, verse);
-		// }
 		console.error("Woodworm: jQuery not included. Woodworm needs jQuery to do it's thang."); 
 	}
-
-	var name = "Woodworm",
-		defaults = {
-			book: "Genesis",
-			chapter: 1,
-			verse: 1,
-			selected_verses: []
-		};
 
 	/**
 	 * @class  Woodworm
@@ -34,10 +22,27 @@
 	 * @constructor
 	 */
 	function Woodworm(element, options) {
+
+
+		// Properties 
+		
+		/**
+		 * Settings surrounding the state of the plugin
+		 * @property {Object} settings
+		 * @type {Object}
+		*/
+		this.settings = {
+			book: "Genesis",
+			chapter: 1,
+			verse: 1,
+			selectedVerses: []
+		};
+
+
+
+
 		this.element = element;
-		this.settings = $.extend({}, defaults, options);
-		this._defaults = defaults;
-		this._name = name;
+		this.settings = $.extend({}, this.settings, options);
 		this.init();     
 	}
 
@@ -52,58 +57,65 @@
 		/**
 		 * Retreive a chapter from labs.Bible.org
 		 * @method  getChapter
-		 * @param  {Integer}   book     The book to lookup
-		 * @param  {Integer}   chapter  The chapter to lookup
-		 * @param  {Function} callback  The associated callback
+		 * @param  {Number}   book     The book to lookup
+		 * @param  {Number}   chapter  The chapter to lookup
 		 */
-		getChapter: function(book, chapter, callback){
+		getChapter: function(book, chapter){
 			//Todo: add front-end validation for book, chapter, verse
-			if(typeof(book) !== "function"){
-				this.settings.chapter = chapter ? parseInt(chapter) : this.settings.chapter;
-				this.settings.book = book ? book : this.settings.book;
-			}else {
-				callback = book;	
-			}
-			// Whats going on here is an attempt to preserve context in the midst of $getJson
-			// I had trouble getting the callback to run using $.ajax
-			// Running the naked json call coming back from bible.org woulnd't work since render
-			// is a part of the Woodworm object and there could be multiple instances in the dom.
-			// So this is what I came up with. For now.
-			this.getData(this.render, callback, this);
-		},
+			this.settings.chapter = chapter ? parseInt(chapter) : this.settings.chapter;
+			this.settings.book = book ? book : this.settings.book;
+			
+			this.getData().done(function(data){
+				this.render(data);
+			});
+		},	
 		/**
 		 * Render a set of verses to the DOM
 		 * @method  render
 		 * @param  {Object} verses  An array of verses (json)
-		 * @param  {Object} context In order to preserve context
 		 */
-		render: function(verses, context){
-			$(context.element).empty();
+		render: function(verses){
+			$(this.element).empty();
 			for (var i = 0; i < verses.length; i++) {
 				var book = verses[i].bookname;
 				var chapter = verses[i].chapter;
 				var verse = verses[i].verse;
 				if(verses[i].title){
-					$(context.element).append("<h4>" + verses[i].title + "</h4>");
-					$(context.element).append("<div class='p' id=" + book + chapter + "-" + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='content'></span><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
+					$(this.element).append("<h4>" + verses[i].title + "</h4>");
+					$(this.element).append("<div class='p' id=" + book + chapter + "-" + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='content'></span><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
 				}else{
-					$(context.element).append("<div class='p' id=" + book + chapter + "-" + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='content'></span><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
+					$(this.element).append("<div class='p' id=" + book + chapter + "-" + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='content'></span><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
 				}
 			}
 		},
-		getData: function(innerCallback, outerCallback, context){
-			// Not specifying a callback name since that wont work (reason given above). done() is still returning the data.
-			// So this is basically a way to get around Same Origiin problems.
-			$.getJSON("http://labs.bible.org/api/?passage=" + context.settings.book + "%20" + context.settings.chapter + "&type=json&callback=?").done(function(args){				
-				innerCallback(args, context);
-				if(outerCallback) {
-					outerCallback(args, context);
-				}
+		/**
+		 * Grab bible data from labs.bible.org/api/[passage]
+		 * @method  getData
+		 * @param  {Object} context       Context of the calling function
+		 */
+		getData: function(){
+			var ajax = $.ajax({
+				url: "http://labs.bible.org/api/?passage=" + this.settings.book + "%20" + this.settings.chapter + "&type=json&callback=?",
+				dataType: "json",
+				context: this
 			});
+			return ajax;
 		},
+		/**
+		 * Return the status of the plugin - basically the current state / settings
+		 * @method  status
+		 * @return {Object} Plugin settings / State
+		 */
 		status: function(){
 			return this.settings;
 		},
+		/**
+		 * Called when a verse is clicked - Responsible for toggling and storing selected verses
+		 * @method  verseClick
+		 * @param  {String} book    Book clicked
+		 * @param  {Number} chapter Chapter clicked
+		 * @param  {Number} verse   Verse clicked
+		 */
 		verseClick: function(book, chapter, verse){
 
 			function toggleSelected(verse, verses){
@@ -133,16 +145,21 @@
 		// validate: function(book,chapter,verse){
 
 		// },
+		/**
+		 * Formats an error should Woodworm need to throw any
+		 * @method  err
+		 * @param  {String} msg A custom error string
+		 */
 		err: function(msg){
 			console.error(msg);
 		}
 	});
 
 
-	$.fn[name] = function(options) {
+	$.fn.Woodworm = function(options) {
 		return this.each(function() {
-			if (!$.data(this, "plugin_" + name)) {
-				$.data(this, "plugin_" + name, new Woodworm(this, options));
+			if (!$.data(this, "plugin_" + "Woodworm")) {
+				$.data(this, "plugin_" + "Woodworm", new Woodworm(this, options));
 			}
 		});
 	};

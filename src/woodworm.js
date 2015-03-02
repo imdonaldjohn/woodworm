@@ -28,7 +28,7 @@
 			chapter: 1,
 			verse: 1,
 			selectedVerses: []
-		}
+		};
 
 
 
@@ -148,7 +148,7 @@
 	});
 
 
-	$.fn["Woodworm"] = function(options) {
+	$.fn.Woodworm = function(options) {
 		return this.each(function() {
 			if (!$.data(this, "plugin_" + "Woodworm")) {
 				$.data(this, "plugin_" + "Woodworm", new Woodworm(this, options));
