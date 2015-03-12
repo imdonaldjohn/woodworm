@@ -15,9 +15,6 @@
 	 */
 	function Woodworm(element, options) {
 
-
-		// Properties 
-		
 		/**
 		 * Settings surrounding the state of the plugin
 		 * @property {Object} settings
@@ -27,15 +24,22 @@
 			book: "Genesis",
 			chapter: 1,
 			verse: 1,
-			selectedVerses: []
+			selectedVerses: [],
+			infiniteScroll: false
 		};
 
-
-
-
+		/**
+		 * Keeps track of the element WW was called on.
+		 * @property {Object} element 
+		 * @type {Object}
+		 */
 		this.element = element;
+
+
 		this.settings = $.extend({}, this.settings, options);
 		this.init();     
+
+		return this;
 	}
 
 	$.extend(Woodworm.prototype, {
@@ -74,9 +78,9 @@
 				var verse = verses[i].verse;
 				if(verses[i].title){
 					$(this.element).append("<h4>" + verses[i].title + "</h4>");
-					$(this.element).append("<div class='p' id=" + book + chapter + "-" + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='content'></span><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
+					$(this.element).append("<div class='p' id=" + book + chapter + "-" + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
 				}else{
-					$(this.element).append("<div class='p' id=" + book + chapter + "-" + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='content'></span><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
+					$(this.element).append("<div class='p' id=" + book + chapter + "-" + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='verse' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
 				}
 			}
 		},
