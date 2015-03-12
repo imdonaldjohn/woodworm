@@ -1,9 +1,17 @@
-;(function($, window, document, undefined) {
+;(function(root, factory) {
+
+  if (typeof define === "function" && define.amd) {
+    define(["jquery"], factory);
+  } else {
+    root.Woodworm = factory(root.$ || root.jQuery, window, document, undefined);
+  }
+
+}(this, function($, window, document, undefined) {
 
 	"use strict";
 
 	if(!$ || !window.jQuery){
-		console.error("Woodworm: jQuery not included. Woodworm needs jQuery to do it's thang."); 
+		throw("Woodworm: jQuery not included. Woodworm needs jQuery to do it's thang."); 
 	}
 
 	/**
@@ -18,13 +26,14 @@
 		/**
 		 * Settings surrounding the state of the plugin
 		 * @property {Object} settings
+		 *           @param {String} version The bible version
+		 *           @param {Number} maxWait Max time allowed waiting for ajax reponses
+		 *           @param {Boolean} infiniteScroll Whether WW should call out for the next chapter on scroll bottom (where applicable)
 		 * @type {Object}
 		*/
 		this.settings = {
-			book: "Genesis",
-			chapter: 1,
-			verse: 1,
-			selectedVerses: [],
+			version: "NET",
+			maxWait: 10000,
 			infiniteScroll: false
 		};
 
@@ -35,12 +44,35 @@
 		 */
 		this.element = element;
 
+		/**
+		 * Keeps track of selected verses
+		 * @property {Array} selectedVerses 
+		 * @type {Array}
+		 */
+		this.selectedVerses = [];
+
+		/**
+		 * Current book
+		 * @property {String} book
+		 * @type {String}
+		 */
+		this.book = (options && options.book) ? options.book : "Genesis";
+
+		/**
+		 * Current chapter
+		 * @property {Number} chapter 
+		 * @type {Number}
+		 */
+		this.chapter = (options && options.chapter) ? options.chapter : 1;
+
 
 		this.settings = $.extend({}, this.settings, options);
 		this.init();     
 
-		return this;
 	}
+
+	Woodworm.status = function(){
+	};
 
 	$.extend(Woodworm.prototype, {
 		/**
@@ -58,8 +90,8 @@
 		 */
 		getChapter: function(book, chapter){
 			//Todo: add front-end validation for book, chapter, verse
-			this.settings.chapter = chapter ? parseInt(chapter) : this.settings.chapter;
-			this.settings.book = book ? book : this.settings.book;
+			this.chapter = chapter ? parseInt(chapter) : this.chapter;
+			this.book = book ? book : this.book;
 			
 			this.getData().done(function(data){
 				this.render(data);
@@ -91,7 +123,7 @@
 		 */
 		getData: function(){
 			var ajax = $.ajax({
-				url: "http://labs.bible.org/api/?passage=" + this.settings.book + "%20" + this.settings.chapter + "&type=json&callback=?",
+				url: "http://labs.bible.org/api/?passage=" + this.book + "%20" + this.chapter + "&type=json&callback=?",
 				dataType: "json",
 				context: this
 			});
@@ -154,10 +186,15 @@
 
 	$.fn.Woodworm = function(options) {
 		return this.each(function() {
-			if (!$.data(this, "plugin_" + "Woodworm")) {
-				$.data(this, "plugin_" + "Woodworm", new Woodworm(this, options));
+			if (!$.data(this, "woodworm")) {
+				$.data(this, "woodworm", new Woodworm(this, options));
 			}
 		});
 	};
 
-})(jQuery, window, document);
+	return Woodworm;
+
+}));
+
+
+
