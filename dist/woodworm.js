@@ -6,15 +6,194 @@
  *  Made by Don Adams
  *  Under MIT License
  */
+/* escape, keys, has, and isObject functions taken from underscore.js
+   *
+   * Copyright (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and
+   * Investigative Reporters & Editors
+   *
+   * Permission is hereby granted, free of charge, to any person
+   * obtaining a copy of this software and associated documentation
+   * files (the "Software"), to deal in the Software without
+   * restriction, including without limitation the rights to use,
+   * copy, modify, merge, publish, distribute, sublicense, and/or sell
+   * copies of the Software, and to permit persons to whom the
+   * Software is furnished to do so, subject to the following
+   * conditions:
+   *
+   * The above copyright notice and this permission notice shall be
+   * included in all copies or substantial portions of the Software.
+   *
+   * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+   * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+   * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+   * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+   * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
+   * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+   * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+   * OTHER DEALINGS IN THE SOFTWARE.
+   */
+  window._ = window._ || {};
+
+  // Shortcut function for checking if an object has a given property directly
+  // on itself (in other words, not on a prototype).
+  var has = function(obj, key) {
+    return obj != null && hasOwnProperty.call(obj, key);
+  };
+
+  // Is a given variable an object?
+  var isObject = function(obj) {
+    var type = typeof obj;
+    return type === 'function' || type === 'object' && !!obj;
+  };
+
+  // Retrieve the names of an object's own properties.
+  // Delegates to **ECMAScript 5**'s native `Object.keys`
+  var keys = function(obj) {
+    if (!isObject(obj)) return [];
+    if (Object.keys) return Object.keys(obj);
+    var keys = [];
+    for (var key in obj) if (has(obj, key)) keys.push(key);
+    return keys;
+  };
+
+  // List of HTML entities for escaping.
+  var escapeMap = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#x27;',
+    '`': '&#x60;'
+  };
+
+  // Functions for escaping and unescaping strings to/from HTML interpolation.
+  var createEscaper = function(map) {
+    var escaper = function(match) {
+      return map[match];
+    };
+    // Regexes for identifying a key that needs to be escaped
+    var source = '(?:' + keys(map).join('|') + ')';
+    var testRegexp = RegExp(source);
+    var replaceRegexp = RegExp(source, 'g');
+    return function(string) {
+      string = string == null ? '' : '' + string;
+      return testRegexp.test(string) ? string.replace(replaceRegexp, escaper) : string;
+    };
+  };
+
+  window._.escape = createEscaper(escapeMap);
 ;(function(root, factory) {
 
   if (typeof define === "function" && define.amd) {
     define(["jquery"], factory);
   } else {
-    root.Woodworm = factory(root.$ || root.jQuery, window, document, undefined);
+    root.Verse = factory(root.$ || root.jQuery, window, document, undefined);
   }
 
 }(this, function($, window, document, undefined) {
+
+	"use strict";
+
+	/**
+	 * @class Verse
+	 * @constructor
+	 * @param {HTMLElemnt} element The dom element associated with the verse
+	 * @param {Object} options Verse options.
+	 */
+	function Verse(element, options) {
+
+		/**
+		 * Verse defaults
+		 * @property {Object} defaults
+		 * @type {Object}
+		 */
+		this.defaults = {
+			selected: false,
+			book: '',
+			chapter: 0,
+			verse: 0,
+			text: ''
+		}
+
+		/**
+		 * The DOM element associated with the verse
+		 * @property {HTMLElemnt} element
+		 * @type {HTMLElement}
+		 */
+		this.element = element;
+
+		/**
+		 * Settings for the verse
+		 * @property {Object} settings
+		 * @type {Object}
+		 */
+		this.settings = $.extend({}, this.defaults, options);
+		
+
+
+	}
+
+	/**
+	 * Verse satus
+	 * @property {Function} status
+	 * @return {Object} Status
+	 */
+	Verse.status = function(){
+
+	};
+
+	$.extend(Verse.prototype, {
+		/**
+		 * Initialize Verse
+		 * @method init 
+		 */
+		init: function() {    
+			
+		},
+		/**
+		 * Render verse from template
+		 * @method render
+		 * @param  {Object} verse  Verse object
+		 * @return {String}        String html
+		 */
+		render: function(){
+			var verseTemplate = Woodworm.Templates['verse'];
+			return verseTemplate({verse: this.settings, click: this.click});
+		},
+		/**
+		 * Onclick function for verses
+		 * @method click
+		 * @return {Object} 
+		 */
+		click: function(){
+			console.log('clicked!')
+		},
+		/**
+		 * Verse error function
+		 * @method err
+		 * @param  {String} msg Error message
+		 */
+		err: function(msg){
+
+		}
+	});
+
+
+	return Verse;
+
+}));
+
+
+
+;(function(root, factory) {
+
+  if (typeof define === "function" && define.amd) {
+    define(["jquery","Verse"], factory);
+  } else {
+    root.Woodworm = factory(root.$ || root.jQuery, Verse, window, document, undefined);
+  }
+
+}(this, function($, Verse, window, document, undefined) {
 
 	"use strict";
 
@@ -24,7 +203,7 @@
 
 	/**
 	 * @class  Woodworm
-	 * @param {jQuery element} element The element woodworm will build upon.
+	 * @param {HTMLElement} element The element woodworm will build upon.
 	 * @param {Object} options Any options passed to overide the defaults.
 	 *
 	 * @constructor
@@ -32,14 +211,14 @@
 	function Woodworm(element, options) {
 
 		/**
-		 * Settings surrounding the state of the plugin
-		 * @property {Object} settings
+		 * Defaults surrounding the state of the plugin
+		 * @property {Object} defaults
 		 *           @param {String} version The bible version
 		 *           @param {Number} maxWait Max time allowed waiting for ajax reponses
 		 *           @param {Boolean} infiniteScroll Whether WW should call out for the next chapter on scroll bottom (where applicable)
 		 * @type {Object}
 		*/
-		this.settings = {
+		this.defaults = {
 			version: "NET",
 			maxWait: 10000,
 			infiniteScroll: false
@@ -47,10 +226,17 @@
 
 		/**
 		 * Keeps track of the element WW was called on.
-		 * @property {Object} element 
-		 * @type {Object}
+		 * @property {HTMLElement} element 
+		 * @type {HTMLElement}
 		 */
 		this.element = element;
+
+		/**
+		 * All verses currently shown by woodworm
+		 * @property {Array} verses
+		 * @type {Array}
+		 */
+		this.verses = [];
 
 		/**
 		 * Keeps track of selected verses
@@ -74,7 +260,7 @@
 		this.chapter = (options && options.chapter) ? options.chapter : 1;
 
 
-		this.settings = $.extend({}, this.settings, options);
+		this.settings = $.extend({}, this.defaults, options);
 		this.init();     
 
 	}
@@ -101,8 +287,10 @@
 			this.chapter = chapter ? parseInt(chapter) : this.chapter;
 			this.book = book ? book : this.book;
 			
-			this.getData().done(function(data){
+			this.getData().success(function(data){
 				this.render(data);
+			}).error(function(error){
+				throw error;
 			});
 		},	
 		/**
@@ -113,15 +301,12 @@
 		render: function(verses){
 			$(this.element).empty();
 			for (var i = 0; i < verses.length; i++) {
-				var book = verses[i].bookname;
-				var chapter = verses[i].chapter;
-				var verse = verses[i].verse;
-				if(verses[i].title){
-					$(this.element).append("<h4>" + verses[i].title + "</h4>");
-					$(this.element).append("<div class='p' id=" + book + chapter + "-" + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
-				}else{
-					$(this.element).append("<div class='p' id=" + book + chapter + "-" + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='verse' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
-				}
+				
+				var newVerse = new Verse(null,verses[i]);
+				var verseHtml = newVerse.render();
+				this.verses.push(newVerse);
+
+				$(this.element).append(verseHtml);				
 			}
 		},
 		/**
@@ -178,8 +363,11 @@
 			toggleSelected({book: book, chapter: chapter, verse: verse}, this.settings.selected_verses);
 
 		},
-		// validate: function(book,chapter,verse){
+		// validate: function(book,chapter,verse) {
 
+		// },
+		// serialize: function() {
+		// TODO: Add bible serialization
 		// },
 		/**
 		 * Formats an error should Woodworm need to throw any
@@ -206,3 +394,8 @@
 
 
 
+
+this["Woodworm"] = this["Woodworm"] || {};
+this["Woodworm"]["Templates"] = this["Woodworm"]["Templates"] || {};
+
+this["Woodworm"]["Templates"]["verse"] = function(obj) {obj || (obj = {});var __t, __p = '', __e = _.escape, __j = Array.prototype.join;function print() { __p += __j.call(arguments, '') }with (obj) { if(verse.title){ ;__p += '\n\t<h4>' +((__t = ( verse.title )) == null ? '' : __t) +'</h4>\n'; } ;__p += '\n<div class="p" id="' +((__t = ( verse.bookname )) == null ? '' : __t) +'' +((__t = ( verse.chapter )) == null ? '' : __t) +'-' +((__t = ( verse.verse )) == null ? '' : __t) +'" onclick="' +((__t = ( verse.click )) == null ? '' : __t) +'">\n\t'; if(verse.title){ ;__p += '\n\t<span class="verse v1" data-usfm=\'JHN.1.1\'>\n\t'; } else { ;__p += '\n\t<span class="verse" data-usfm=\'JHN.1.1\'>\n\t'; } ;__p += '\n\t\t<span class=\'label\'>' +((__t = ( verse.verse )) == null ? '' : __t) +'</span>\n\t\t<span class=\'content\'>' +((__t = ( verse.text )) == null ? '' : __t) +'</span>\n\t</span>\n</div>';}return __p};

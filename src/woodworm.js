@@ -1,12 +1,12 @@
 ;(function(root, factory) {
 
   if (typeof define === "function" && define.amd) {
-    define(["jquery"], factory);
+    define(["jquery","Verse"], factory);
   } else {
-    root.Woodworm = factory(root.$ || root.jQuery, window, document, undefined);
+    root.Woodworm = factory(root.$ || root.jQuery, Verse, window, document, undefined);
   }
 
-}(this, function($, window, document, undefined) {
+}(this, function($, Verse, window, document, undefined) {
 
 	"use strict";
 
@@ -16,7 +16,7 @@
 
 	/**
 	 * @class  Woodworm
-	 * @param {jQuery element} element The element woodworm will build upon.
+	 * @param {HTMLElement} element The element woodworm will build upon.
 	 * @param {Object} options Any options passed to overide the defaults.
 	 *
 	 * @constructor
@@ -24,14 +24,14 @@
 	function Woodworm(element, options) {
 
 		/**
-		 * Settings surrounding the state of the plugin
-		 * @property {Object} settings
+		 * Defaults surrounding the state of the plugin
+		 * @property {Object} defaults
 		 *           @param {String} version The bible version
 		 *           @param {Number} maxWait Max time allowed waiting for ajax reponses
 		 *           @param {Boolean} infiniteScroll Whether WW should call out for the next chapter on scroll bottom (where applicable)
 		 * @type {Object}
 		*/
-		this.settings = {
+		this.defaults = {
 			version: "NET",
 			maxWait: 10000,
 			infiniteScroll: false
@@ -39,10 +39,17 @@
 
 		/**
 		 * Keeps track of the element WW was called on.
-		 * @property {Object} element 
-		 * @type {Object}
+		 * @property {HTMLElement} element 
+		 * @type {HTMLElement}
 		 */
 		this.element = element;
+
+		/**
+		 * All verses currently shown by woodworm
+		 * @property {Array} verses
+		 * @type {Array}
+		 */
+		this.verses = [];
 
 		/**
 		 * Keeps track of selected verses
@@ -66,7 +73,7 @@
 		this.chapter = (options && options.chapter) ? options.chapter : 1;
 
 
-		this.settings = $.extend({}, this.settings, options);
+		this.settings = $.extend({}, this.defaults, options);
 		this.init();     
 
 	}
@@ -93,8 +100,10 @@
 			this.chapter = chapter ? parseInt(chapter) : this.chapter;
 			this.book = book ? book : this.book;
 			
-			this.getData().done(function(data){
+			this.getData().success(function(data){
 				this.render(data);
+			}).error(function(error){
+				throw error;
 			});
 		},	
 		/**
@@ -105,15 +114,12 @@
 		render: function(verses){
 			$(this.element).empty();
 			for (var i = 0; i < verses.length; i++) {
-				var book = verses[i].bookname;
-				var chapter = verses[i].chapter;
-				var verse = verses[i].verse;
-				if(verses[i].title){
-					$(this.element).append("<h4>" + verses[i].title + "</h4>");
-					$(this.element).append("<div class='p' id=" + book + chapter + "-" + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='verse v1' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
-				}else{
-					$(this.element).append("<div class='p' id=" + book + chapter + "-" + verse + " onclick=\"catchClick('" + book + "'," +chapter+","+verse+")\"><span class='verse' data-usfm='JHN.1.1'><span class='label'>" + verses[i].verse + "</span><span class='content'>" + verses[i].text + "</span></span></div>");
-				}
+				
+				var newVerse = new Verse(null,verses[i]);
+				var verseHtml = newVerse.render();
+				this.verses.push(newVerse);
+
+				$(this.element).append(verseHtml);				
 			}
 		},
 		/**
@@ -170,8 +176,11 @@
 			toggleSelected({book: book, chapter: chapter, verse: verse}, this.settings.selected_verses);
 
 		},
-		// validate: function(book,chapter,verse){
+		// validate: function(book,chapter,verse) {
 
+		// },
+		// serialize: function() {
+		// TODO: Add bible serialization
 		// },
 		/**
 		 * Formats an error should Woodworm need to throw any

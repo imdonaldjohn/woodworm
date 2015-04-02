@@ -23,7 +23,7 @@ module.exports = function(grunt) {
 				banner: "<%= meta.banner %>"
 			},
 			dist: {
-				src: ["src/woodworm.js"],
+				src: ["src/utils.js","src/verse.js","src/woodworm.js","src/templates.js"],
 				dest: "dist/woodworm.js"
 			}
 		},
@@ -82,9 +82,27 @@ module.exports = function(grunt) {
 					base: ['./','./demo/']
 				}
 			}
+		},
+
+		// Compile templates
+		jst: {
+			compile: {
+				options: {
+					namespace: "Woodworm.Templates",
+					prettify: true,
+					processName: function(filename) {
+			            return filename.replace(/(src\/templates\/|.html)/g, '');
+			        }
+				},
+				files: {
+					"src/templates.js": ["src/templates/**/*.html"]
+				}
+			}
 		}
 
 	});
+
+	grunt.option('force', true);
 
 	grunt.loadNpmTasks("grunt-contrib-concat");
 	grunt.loadNpmTasks("grunt-contrib-jshint");
@@ -92,9 +110,10 @@ module.exports = function(grunt) {
 	// grunt.loadNpmTasks("grunt-contrib-watch");
 	grunt.loadNpmTasks("grunt-contrib-yuidoc");
 	grunt.loadNpmTasks("grunt-contrib-connect");
+	grunt.loadNpmTasks('grunt-contrib-jst');
 
-	grunt.registerTask("build", ["concat", "uglify"]);
-	grunt.registerTask("dev", ["jshint", "build", "yuidoc", "connect"]);
+	grunt.registerTask("build", ["jst", "concat", "uglify"]);
+	grunt.registerTask("dev", ["build", "jshint", "yuidoc", "connect"]);
 	grunt.registerTask("default", ["jshint", "build", "yuidoc"]);
 	grunt.registerTask("travis", ["default"]);
 
