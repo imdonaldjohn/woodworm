@@ -114,12 +114,9 @@
 		render: function(verses){
 			$(this.element).empty();
 			for (var i = 0; i < verses.length; i++) {
-				
-				var newVerse = new Verse(null,verses[i]);
-				var verseHtml = newVerse.render();
-				this.verses.push(newVerse);
-
-				$(this.element).append(verseHtml);				
+				var v = new Verse(verses[i]);
+				this.verses.push(v.render());
+				$(this.element).append(v.getData().element);				
 			}
 		},
 		/**

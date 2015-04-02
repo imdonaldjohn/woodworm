@@ -16,7 +16,7 @@
 	 * @param {HTMLElemnt} element The dom element associated with the verse
 	 * @param {Object} options Verse options.
 	 */
-	function Verse(element, options) {
+	function Verse(options) {
 
 		/**
 		 * Verse defaults
@@ -36,7 +36,7 @@
 		 * @property {HTMLElemnt} element
 		 * @type {HTMLElement}
 		 */
-		this.element = element;
+		this.element = {};
 
 		/**
 		 * Settings for the verse
@@ -67,6 +67,16 @@
 			
 		},
 		/**
+		 * Exposes all relevant data used by the Verse
+		 * @return {Object} Verse Data
+		 */
+		getData: function() {
+			return {
+				settings: this.settings,
+				element: this.element
+			}
+		},
+		/**
 		 * Render verse from template
 		 * @method render
 		 * @param  {Object} verse  Verse object
@@ -74,7 +84,8 @@
 		 */
 		render: function(){
 			var verseTemplate = Woodworm.Templates['verse'];
-			return verseTemplate({verse: this.settings, click: this.click});
+			this.element = verseTemplate({verse: this.settings});
+			return this;
 		},
 		/**
 		 * Onclick function for verses
