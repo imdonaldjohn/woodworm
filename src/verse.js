@@ -80,12 +80,23 @@
 		 * Render verse from template
 		 * @method render
 		 * @param  {Object} verse  Verse object
-		 * @return {String}        String html
+		 * @return {HTMLElement}   Verse HTML
 		 */
 		render: function(){
 			var verseTemplate = Woodworm.Templates['verse'];
 			this.element = verseTemplate({verse: this.settings});
+
+			this.bootstrap(this.element);
+
 			return this;
+		},
+		/**
+		 * [bootstrap description]
+		 * @param  {[type]} element [description]
+		 * @return {[type]}         [description]
+		 */
+		bootstrap: function(element){
+			// debugger
 		},
 		/**
 		 * Onclick function for verses

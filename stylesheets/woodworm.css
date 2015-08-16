@@ -1,0 +1,37 @@
+/* line 6, ../sass/woodworm.scss */
+h4 {
+  font-family: Helvetica;
+}
+
+/* line 10, ../sass/woodworm.scss */
+.p {
+  display: inline;
+  font-size: 16px;
+  line-height: 25px;
+  font-family: helvetica;
+  color: #6B6B6B;
+  font-weight: 100;
+  padding: 5px 0px;
+}
+/* line 19, ../sass/woodworm.scss */
+.p.selected {
+  background: #FFFFC2;
+  color: #292929;
+}
+/* line 24, ../sass/woodworm.scss */
+.p .verse {
+  border: 0;
+  margin: 0;
+  font-size: 100%;
+}
+/* line 29, ../sass/woodworm.scss */
+.p .verse .label {
+  top: 5px;
+  color: #777;
+  font-family: Helvetica;
+  font-weight: normal;
+  font-size: 8px;
+  line-height: 1;
+  vertical-align: text-top;
+  margin-left: 3px;
+}

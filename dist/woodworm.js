@@ -142,12 +142,23 @@ window._.escape = createEscaper(escapeMap);
 		 * Render verse from template
 		 * @method render
 		 * @param  {Object} verse  Verse object
-		 * @return {String}        String html
+		 * @return {HTMLElement}   Verse HTML
 		 */
 		render: function(){
 			var verseTemplate = Woodworm.Templates['verse'];
 			this.element = verseTemplate({verse: this.settings});
+
+			this.bootstrap(this.element);
+
 			return this;
+		},
+		/**
+		 * [bootstrap description]
+		 * @param  {[type]} element [description]
+		 * @return {[type]}         [description]
+		 */
+		bootstrap: function(element){
+			// debugger
 		},
 		/**
 		 * Onclick function for verses
@@ -292,8 +303,11 @@ window._.escape = createEscaper(escapeMap);
 			for (var i = 0; i < verses.length; i++) {
 				var v = new Verse(verses[i]);
 				this.verses.push(v.render());
-				$(this.element).append(v.getData().element);				
+				$(this.element).append(v.getData().element);
 			}
+
+			// Listen for clicks
+			$('div.p').on('click', $.proxy(this.verseClick, this));
 		},
 		/**
 		 * Grab bible data from labs.bible.org/api/[passage]
@@ -323,30 +337,12 @@ window._.escape = createEscaper(escapeMap);
 		 * @param  {Number} chapter Chapter clicked
 		 * @param  {Number} verse   Verse clicked
 		 */
-		verseClick: function(book, chapter, verse){
+		verseClick: function(event){
+			var book = event.delegateTarget.id.split('-')[0], 
+				chapter = event.delegateTarget.id.split('-')[1], 
+				verse = event.delegateTarget.id.split('-')[2];
 
-			function toggleSelected(verse, verses){
-				var deleted;
-				$.grep(verses, function(e, i){ 
-					if(verse.verse === e.verse && verse.book === e.book && verse.chapter === e.chapter){
-						verses = verses.splice(i,1);
-						deleted = true;
-					}
-				});
-				if(!deleted) {
-					verses.push(verse);
-				}
-				
-				console.log(verses);
-			}
-
-			if($("#"+book+chapter+"-"+verse).css("background-color") !== "rgb(255, 255, 0)"){
-				$("#"+book+chapter+"-"+verse).css("background-color", "yellow");
-				// this.settings.selected_verses.push({book:book, chapter:chapter, verse:verse});
-			}else{
-				$("#"+book+chapter+"-"+verse).css("background-color", "white");	
-			}
-			toggleSelected({book: book, chapter: chapter, verse: verse}, this.settings.selected_verses);
+			$("#"+book+"-"+chapter+"-"+verse).toggleClass('selected');
 
 		},
 		// validate: function(book,chapter,verse) {
@@ -355,6 +351,7 @@ window._.escape = createEscaper(escapeMap);
 		// serialize: function() {
 		// TODO: Add bible serialization
 		// },
+		
 		/**
 		 * Formats an error should Woodworm need to throw any
 		 * @method  err
@@ -384,4 +381,4 @@ window._.escape = createEscaper(escapeMap);
 this["Woodworm"] = this["Woodworm"] || {};
 this["Woodworm"]["Templates"] = this["Woodworm"]["Templates"] || {};
 
-this["Woodworm"]["Templates"]["verse"] = function(obj) {obj || (obj = {});var __t, __p = '', __e = _.escape, __j = Array.prototype.join;function print() { __p += __j.call(arguments, '') }with (obj) { if(verse.title){ ;__p += '\n\t<h4>' +((__t = ( verse.title )) == null ? '' : __t) +'</h4>\n'; } ;__p += '\n<div class="p" id="' +((__t = ( verse.bookname )) == null ? '' : __t) +'' +((__t = ( verse.chapter )) == null ? '' : __t) +'-' +((__t = ( verse.verse )) == null ? '' : __t) +'" onclick="' +((__t = ( verse.click )) == null ? '' : __t) +'">\n\t'; if(verse.title){ ;__p += '\n\t<span class="verse v1" data-usfm=\'JHN.1.1\'>\n\t'; } else { ;__p += '\n\t<span class="verse" data-usfm=\'JHN.1.1\'>\n\t'; } ;__p += '\n\t\t<span class=\'label\'>' +((__t = ( verse.verse )) == null ? '' : __t) +'</span>\n\t\t<span class=\'content\'>' +((__t = ( verse.text )) == null ? '' : __t) +'</span>\n\t</span>\n</div>';}return __p};
+this["Woodworm"]["Templates"]["verse"] = function(obj) {obj || (obj = {});var __t, __p = '', __e = _.escape, __j = Array.prototype.join;function print() { __p += __j.call(arguments, '') }with (obj) { if(verse.title){ ;__p += '\n\t<h4>' +((__t = ( verse.title )) == null ? '' : __t) +'</h4>\n'; } ;__p += '\n<div class="p" id="' +((__t = ( verse.bookname )) == null ? '' : __t) +'-' +((__t = ( verse.chapter )) == null ? '' : __t) +'-' +((__t = ( verse.verse )) == null ? '' : __t) +'">\n\t'; if(verse.title){ ;__p += '\n\t<span class="verse v1" data-usfm=\'JHN.1.1\'>\n\t'; } else { ;__p += '\n\t<span class="verse" data-usfm=\'JHN.1.1\'>\n\t'; } ;__p += '\n\t\t<span class=\'label\'><a href="#">' +((__t = ( verse.verse )) == null ? '' : __t) +'</a></span>\n\t\t<span class=\'content\'>' +((__t = ( verse.text )) == null ? '' : __t) +'</span>\n\t</span>\n</div>';}return __p};

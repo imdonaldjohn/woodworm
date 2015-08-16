@@ -1,13 +1,13 @@
 <% if(verse.title){ %>
 	<h4><%= verse.title %></h4>
 <% } %>
-<div class="p" id="<%= verse.bookname %><%= verse.chapter %>-<%= verse.verse %>" onclick="<%= verse.click %>">
+<div class="p" id="<%= verse.bookname %>-<%= verse.chapter %>-<%= verse.verse %>">
 	<% if(verse.title){ %>
 	<span class="verse v1" data-usfm='JHN.1.1'>
 	<% } else { %>
 	<span class="verse" data-usfm='JHN.1.1'>
 	<% } %>
-		<span class='label'><%= verse.verse %></span>
+		<span class='label'><a href="#"><%= verse.verse %></a></span>
 		<span class='content'><%= verse.text %></span>
 	</span>
 </div>

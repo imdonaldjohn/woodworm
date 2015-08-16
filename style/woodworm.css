@@ -1,34 +1,60 @@
+/* line 4, ../sass/woodworm.scss */
 h4 {
-	font-family: Helvetica;
+  font-family: Helvetica;
+  text-align: center;
+  font-size: 25px;
+  font-weight: 100;
+  margin: 15px 0px;
 }
 
+/* line 12, ../sass/woodworm.scss */
 .p {
-	display: inline;
-	font-size: .8em;
-	line-height: 2em;
-	font-family: helvetica;
+  display: inline;
+  position: relative;
+  font-size: 16px;
+  font-family: Helvetica;
+  line-height: 25px;
+  font-family: helvetica;
+  color: #6B6B6B;
+  font-weight: 100;
+  padding: 5px 0px;
+  -moz-transition: color 300ms;
+  -o-transition: color 300ms;
+  -webkit-transition: color 300ms;
+  transition: color 300ms;
+  -moz-transition: background-color 300ms;
+  -o-transition: background-color 300ms;
+  -webkit-transition: background-color 300ms;
+  transition: background-color 300ms;
+}
+/* line 26, ../sass/woodworm.scss */
+.p.selected {
+  background-color: #FFFFC2;
+  color: #292929;
+}
+/* line 31, ../sass/woodworm.scss */
+.p .verse {
+  border: 0;
+  margin: 0;
+  font-size: 100%;
+}
+/* line 36, ../sass/woodworm.scss */
+.p .verse .label {
+  top: 5px;
+  font-family: Helvetica;
+  font-weight: normal;
+  font-size: 8px;
+  line-height: 1;
+  vertical-align: text-top;
+  margin-left: 3px;
+}
+/* line 46, ../sass/woodworm.scss */
+.p .verse .label a {
+  color: #636363;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
 }
 
-.content {
-
-}
-
-.verse {
-	border: 0;
-	margin: 0;
-	padding: 2px;
-	font-size: 100%;
-}
-
-.label {
-	color: #777;
-	font-family: Helvetica;
-	font-weight: normal;
-	font-size: 8px;
-	line-height: 1;
-	margin-right: 4px;
-}
-
-.content {
-
-}
+/*# sourceMappingURL=woodworm.css.map */

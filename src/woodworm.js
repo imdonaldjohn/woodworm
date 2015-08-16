@@ -116,8 +116,11 @@
 			for (var i = 0; i < verses.length; i++) {
 				var v = new Verse(verses[i]);
 				this.verses.push(v.render());
-				$(this.element).append(v.getData().element);				
+				$(this.element).append(v.getData().element);
 			}
+
+			// Listen for clicks
+			$('div.p').on('click', $.proxy(this.verseClick, this));
 		},
 		/**
 		 * Grab bible data from labs.bible.org/api/[passage]
@@ -147,30 +150,12 @@
 		 * @param  {Number} chapter Chapter clicked
 		 * @param  {Number} verse   Verse clicked
 		 */
-		verseClick: function(book, chapter, verse){
+		verseClick: function(event){
+			var book = event.delegateTarget.id.split('-')[0], 
+				chapter = event.delegateTarget.id.split('-')[1], 
+				verse = event.delegateTarget.id.split('-')[2];
 
-			function toggleSelected(verse, verses){
-				var deleted;
-				$.grep(verses, function(e, i){ 
-					if(verse.verse === e.verse && verse.book === e.book && verse.chapter === e.chapter){
-						verses = verses.splice(i,1);
-						deleted = true;
-					}
-				});
-				if(!deleted) {
-					verses.push(verse);
-				}
-				
-				console.log(verses);
-			}
-
-			if($("#"+book+chapter+"-"+verse).css("background-color") !== "rgb(255, 255, 0)"){
-				$("#"+book+chapter+"-"+verse).css("background-color", "yellow");
-				// this.settings.selected_verses.push({book:book, chapter:chapter, verse:verse});
-			}else{
-				$("#"+book+chapter+"-"+verse).css("background-color", "white");	
-			}
-			toggleSelected({book: book, chapter: chapter, verse: verse}, this.settings.selected_verses);
+			$("#"+book+"-"+chapter+"-"+verse).toggleClass('selected');
 
 		},
 		// validate: function(book,chapter,verse) {
@@ -179,6 +164,7 @@
 		// serialize: function() {
 		// TODO: Add bible serialization
 		// },
+		
 		/**
 		 * Formats an error should Woodworm need to throw any
 		 * @method  err

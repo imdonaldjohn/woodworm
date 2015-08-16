@@ -1,0 +1,62 @@
+@import "compass/css3/transition";
+@import "variables";
+
+h4 {
+	font-family: Helvetica;
+	text-align: center;
+    font-size: 25px;
+    font-weight: 100;
+    margin: 15px 0px;	
+}
+
+.p {
+	display: inline;
+	position:relative;
+	font-size: $verse-size;
+	font-family: Helvetica;
+	line-height: $verse-line-height;
+	font-family: helvetica;
+	color: $verse-color;
+	font-weight: $verse-weight;
+	padding: 5px 0px;
+
+	@include single-transition(color, 300ms);
+	@include single-transition(background-color, 300ms);
+
+	&.selected {
+		background-color: $color-highlight;
+		color: #292929;
+	}
+
+	.verse {
+		border: 0;
+		margin: 0;
+		font-size: 100%;
+
+		.label {
+			top: 5px;
+			
+			font-family: Helvetica;
+			font-weight: normal;
+			font-size: 8px;
+			line-height: 1;
+			vertical-align: text-top;
+			margin-left: 3px;
+
+			a {
+				color: #636363;
+				text-decoration: none;
+				font-size: 12px;
+    			font-weight: 600;
+    			font-family: inherit;
+			}
+		}
+
+		span.content {
+
+			&:hover {
+			}
+		}
+	}
+}
+
