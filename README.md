@@ -1,7 +1,7 @@
 Woodworm.js
 ========
 
-[![Build Status](https://travis-ci.org/imdonaldjohn/woodworm.svg?branch=master)](https://travis-ci.org/imdonaldjohn/woodworm)[![Stories in Ready](https://badge.waffle.io/donald-john/woodworm.svg?label=ready&title=Ready)](http://waffle.io/donald-john/woodworm)
+[![Build Status](https://travis-ci.org/imdonaldjohn/woodworm.svg?branch=master)](https://travis-ci.org/imdonaldjohn/woodworm)
 
 Woodworm.js is a javascript library to parse and display bible passages from labs.bible.org.
 This is still under early development but a demo of what's done so far can be seen here:
