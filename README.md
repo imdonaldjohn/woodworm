@@ -1,6 +1,15 @@
 Woodworm.js
 ========
 
+### This project has been abandoned :{
+### Instead, use these services which will do the trick just fine
+1. Bible.org's html web API https://labs.bible.org/api_web_service
+2. Logos' Reftagger plugin https://faithlife.com/products/reftagger
+<br>
+*If you'd like to build off of it, feel free to fork and start there!*
+
+---
+
 [![Build Status](https://travis-ci.org/imdonaldjohn/woodworm.svg?branch=master)](https://travis-ci.org/imdonaldjohn/woodworm)
 
 Woodworm.js is a javascript library to parse and display bible passages from labs.bible.org.
